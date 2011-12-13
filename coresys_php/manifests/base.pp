@@ -25,6 +25,10 @@ package { "php5-mysql":
   ensure => present,
 }
 
+package { "php5-ldap":
+  ensure => present,
+}
+
 package { "php-pear":
   ensure => present,
 }
