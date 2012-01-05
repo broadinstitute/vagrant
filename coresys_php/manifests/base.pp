@@ -5,6 +5,10 @@ exec { "apt-get update":
 Package { require => Exec["apt-get update"] }
 File { require => Exec["apt-get update"] }
 
+package { "vpnc":
+  ensure => present,
+}
+
 package { "vim":
   ensure => present,
 }
@@ -31,6 +35,28 @@ package { "php5-ldap":
 
 package { "php-pear":
   ensure => present,
+}
+
+package { "php5-xsl":
+  ensure => present
+}
+
+package { "graphviz":
+  ensure => present
+}
+
+exec {"/usr/bin/pear upgrade": }
+
+exec { "/usr/bin/pear install PHP_Codesniffer":
+  require => [Package['php-pear'], Exec['/usr/bin/pear upgrade']]
+}
+
+exec { "/usr/bin/pear config-set auto_discover 1":
+  require => [Package['php-pear'], Exec['/usr/bin/pear upgrade']]
+}
+
+exec { "/usr/bin/pear install pear.phpunit.de/PHPUnit":
+  require => [Package['php-pear'], Exec['/usr/bin/pear config-set auto_discover 1'], Exec['/usr/bin/pear upgrade']]
 }
 
 package { "php5-xdebug":
