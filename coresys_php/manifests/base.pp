@@ -5,6 +5,22 @@ exec { "apt-get update":
 Package { require => Exec["apt-get update"] }
 File { require => Exec["apt-get update"] }
 
+package { "postfix":
+  ensure => present,
+}
+
+file { "/etc/postfix/main.cf":
+  ensure => present,
+  source => "/vagrant/manifests/main.cf",
+  require => Package['postfix']
+}
+
+service { "postfix":
+  ensure => running,
+  enable => true,
+  subscribe => File["/etc/postfix/main.cf"],
+}
+
 package { "vpnc":
   ensure => present,
 }
