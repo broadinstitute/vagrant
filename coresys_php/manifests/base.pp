@@ -57,9 +57,13 @@ package { "php5-xsl":
   ensure => present
 }
 
+package { "php5-curl":
+  ensure => present
+}
+
 file { "/etc/php5/apache2/php.ini":
   ensure => present,
-  source => "/vagrant/coresys_php/manifests/php.ini",
+  source => "/vagrant/manifests/php.ini",
 }
 
 exec {"/usr/bin/pear upgrade": }
@@ -94,5 +98,5 @@ file { "/etc/apache2/mods-enabled/rewrite.load":
 
 file { "/etc/apache2/sites-available/default":
   ensure => present,
-  source => "/vagrant/coresys_php/manifests/default",
+  source => "/vagrant/manifests/default",
 }
