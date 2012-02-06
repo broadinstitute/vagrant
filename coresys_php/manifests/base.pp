@@ -29,15 +29,11 @@ package { "vim":
   ensure => present,
 }
 
-package { "apache2":
-  ensure => present,
-}
-
 package { "php5":
   ensure => present,
 }
 
-package { "mysql-server":
+package { "php5-xdebug":
   ensure => present,
 }
 
@@ -57,10 +53,6 @@ package { "php5-xsl":
   ensure => present
 }
 
-package { "graphviz":
-  ensure => present
-}
-
 exec {"/usr/bin/pear upgrade": }
 
 exec { "/usr/bin/pear install PHP_Codesniffer":
@@ -75,7 +67,11 @@ exec { "/usr/bin/pear install pear.phpunit.de/PHPUnit":
   require => [Package['php-pear'], Exec['/usr/bin/pear config-set auto_discover 1'], Exec['/usr/bin/pear upgrade']]
 }
 
-package { "php5-xdebug":
+package { "mysql-server":
+  ensure => present,
+}
+
+package { "apache2":
   ensure => present,
 }
 
