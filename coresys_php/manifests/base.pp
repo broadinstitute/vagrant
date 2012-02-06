@@ -29,6 +29,10 @@ package { "vim":
   ensure => present,
 }
 
+package { "mysql-server":
+  ensure => present,
+}
+
 package { "php5":
   ensure => present,
 }
@@ -53,6 +57,11 @@ package { "php5-xsl":
   ensure => present
 }
 
+file { "/etc/php5/apache2/php.ini":
+  ensure => present,
+  source => "/vagrant/coresys_php/manifests/php.ini",
+}
+
 exec {"/usr/bin/pear upgrade": }
 
 exec { "/usr/bin/pear install PHP_Codesniffer":
@@ -67,10 +76,6 @@ exec { "/usr/bin/pear install pear.phpunit.de/PHPUnit":
   require => [Package['php-pear'], Exec['/usr/bin/pear config-set auto_discover 1'], Exec['/usr/bin/pear upgrade']]
 }
 
-package { "mysql-server":
-  ensure => present,
-}
-
 package { "apache2":
   ensure => present,
 }
@@ -78,7 +83,7 @@ package { "apache2":
 service { "apache2":
   ensure => running,
   enable => true,
-  subscribe => [File["/etc/apache2/mods-enabled/rewrite.load"], File["/etc/apache2/sites-available/default"]],
+  subscribe => [File["/etc/apache2/mods-enabled/rewrite.load"], File["/etc/apache2/sites-available/default"], File["/etc/php5/apache2/php.ini"]]
 }
 
 file { "/etc/apache2/mods-enabled/rewrite.load":
@@ -89,6 +94,5 @@ file { "/etc/apache2/mods-enabled/rewrite.load":
 
 file { "/etc/apache2/sites-available/default":
   ensure => present,
-  source => "/vagrant/manifests/default",
-}  
-
+  source => "/vagrant/coresys_php/manifests/default",
+}
